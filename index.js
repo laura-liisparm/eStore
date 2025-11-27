@@ -1,3 +1,4 @@
+/*
 class product {
   constructor(titel, price, category) {
     this.id = crypto.randomUUID();
@@ -116,4 +117,32 @@ myOrder.printOrder();
 
 const customer1 = new customer("Alice");
 const order1 = customer1.placeOrder(myCart);
+customer1.printOrderHistory();
+*/
+import { Product } from "./product.js";
+import { Cart } from "./cart.js";
+import { Order } from "./order.js";
+import { Customer } from "./customer.js";
+
+const laptop = new Product("Laptop", 999.99, "Electronics");
+const phone = new Product("Smartphone", 499.99, "Electronics");
+
+const myCart = new Cart();
+myCart.addProduct(laptop, 1);
+myCart.addProduct(phone, 2);
+
+console.log(`Total Items: ${myCart.totalItems}`);
+console.log(`Total Price: $${myCart.calculateTotal().toFixed(2)}`);
+
+myCart.removeProduct(phone.id);
+console.log(`Total Items in Cart after removal: ${myCart.totalItems}`);
+console.log(
+  `Total Price after removal: $${myCart.calculateTotal().toFixed(2)}`
+);
+
+const myOrder = new Order(myCart);
+myOrder.printOrder();
+
+const customer1 = new Customer("Alice");
+customer1.placeOrder(myCart);
 customer1.printOrderHistory();
