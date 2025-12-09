@@ -119,10 +119,11 @@ const customer1 = new customer("Alice");
 const order1 = customer1.placeOrder(myCart);
 customer1.printOrderHistory();
 */
-import { Product } from "./product.js";
-import { Cart } from "./cart.js";
-import { Order } from "./order.js";
-import { Customer } from "./customer.js";
+import { Product } from "../constructors/product.js";
+import { Cart } from "../constructors/cart.js";
+import { Order } from "../constructors/order.js";
+import { Customer } from "../constructors/customer.js";
+import { allProductsView } from "../views/allProductsView.js";
 
 const laptop = new Product("Laptop", 999.99, "Electronics");
 const phone = new Product("Smartphone", 499.99, "Electronics");
@@ -146,3 +147,5 @@ myOrder.printOrder();
 const customer1 = new Customer("Alice");
 customer1.placeOrder(myCart);
 customer1.printOrderHistory();
+
+allProductsView([laptop, phone]);
