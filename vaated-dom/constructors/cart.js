@@ -1,4 +1,3 @@
-// Cart.js
 export class Cart {
   constructor() {
     this.items = [];

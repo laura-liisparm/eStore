@@ -1,5 +1,5 @@
 // Customer.js
-import { Order } from "./Order.js";
+import { Order } from "./order.js";
 
 export class Customer {
   constructor(name) {

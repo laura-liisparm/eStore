@@ -119,13 +119,13 @@ const customer1 = new customer("Alice");
 const order1 = customer1.placeOrder(myCart);
 customer1.printOrderHistory();
 */
-import { cartConstructor } from "./constructors/cart.js";
-import { customerConstructor } from "./constructors/customer.js";
-import { Product } from "./constructors/product.js";
-import { displayAllProductsView } from "./views/allProductsView.js";
-import { displayCartView } from "./views/cartView.js";
-import { displayFavoritesView } from "./views/favoritesView.js";
-import { dispalyProductDetailView } from "./views/productDetailView.js";
+import { cartConstructor } from "../constructors/cart.js";
+import { customerConstructor } from "../constructors/customer.js";
+import { Product } from "../constructors/product.js";
+import { displayAllProductsView } from "../views/allProductsView.js";
+import { displayCartView } from "../views/cartView.js";
+import { displayFavoritesView } from "../views/favoritesView.js";
+import { dispalyProductDetailView } from "../views/productDetailView.js";
 
 const products = [
   new Product(1, "Sülearvuti", 999.99, "Elektroonika"),
@@ -142,9 +142,9 @@ const initApp = async () => {
   const cartButton = document.getElementById("cart-button");
 
   displayAllProductsView(products);
-  dispalyProductDetailView(products[1]);
-  displayCartView();
-  displayFavoritesView();
+  // dispalyProductDetailView(products[1]);
+  // displayCartView();
+  // displayFavoritesView();
 };
 
 document.addEventListener("DOMContentLoaded", initApp);
