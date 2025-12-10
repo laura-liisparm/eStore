@@ -7,14 +7,10 @@ export class Product {
   }
 
   displayProduct() {
-    console.log(`
-            ID: ${this.id}, 
-            Title: ${this.title}, 
-            Price: $${this.price}, 
-            Category: ${this.category}`);
+    return `${this.name} - ${this.category} - $${this.price}`;
   }
 
   discountedPrice(discountPercent) {
-    return this.price - (this.price * discountPercent) / 100;
+    return price - (price * discount) / 100;
   }
 }

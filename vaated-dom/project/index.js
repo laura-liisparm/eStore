@@ -119,33 +119,32 @@ const customer1 = new customer("Alice");
 const order1 = customer1.placeOrder(myCart);
 customer1.printOrderHistory();
 */
-import { Product } from "../constructors/product.js";
-import { Cart } from "../constructors/cart.js";
-import { Order } from "../constructors/order.js";
-import { Customer } from "../constructors/customer.js";
-import { allProductsView } from "../views/allProductsView.js";
+import { cartConstructor } from "./constructors/cart.js";
+import { customerConstructor } from "./constructors/customer.js";
+import { Product } from "./constructors/product.js";
+import { displayAllProductsView } from "./views/allProductsView.js";
+import { displayCartView } from "./views/cartView.js";
+import { displayFavoritesView } from "./views/favoritesView.js";
+import { dispalyProductDetailView } from "./views/productDetailView.js";
 
-const laptop = new Product("Laptop", 999.99, "Electronics");
-const phone = new Product("Smartphone", 499.99, "Electronics");
+const products = [
+  new Product(1, "Sülearvuti", 999.99, "Elektroonika"),
+  new Product(2, "Telefon", 599.99, "Elektroonika"),
+  new Product(3, "Tahvelarvuti", 299.99, "Elektroonika"),
+];
 
-const myCart = new Cart();
-myCart.addProduct(laptop, 1);
-myCart.addProduct(phone, 2);
+cartConstructor.addProduct(products[0], products[2]);
+customerConstructor.toggleFavorites(products[0]);
 
-console.log(`Total Items: ${myCart.totalItems}`);
-console.log(`Total Price: $${myCart.calculateTotal().toFixed(2)}`);
+const initApp = async () => {
+  const favoritesButton = document.getElementById("favorites-button");
 
-myCart.removeProduct(phone.id);
-console.log(`Total Items in Cart after removal: ${myCart.totalItems}`);
-console.log(
-  `Total Price after removal: $${myCart.calculateTotal().toFixed(2)}`
-);
+  const cartButton = document.getElementById("cart-button");
 
-const myOrder = new Order(myCart);
-myOrder.printOrder();
+  displayAllProductsView(products);
+  dispalyProductDetailView(products[1]);
+  displayCartView();
+  displayFavoritesView();
+};
 
-const customer1 = new Customer("Alice");
-customer1.placeOrder(myCart);
-customer1.printOrderHistory();
-
-allProductsView([laptop, phone]);
+document.addEventListener("DOMContentLoaded", initApp);
