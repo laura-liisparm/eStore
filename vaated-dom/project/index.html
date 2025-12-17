@@ -13,11 +13,11 @@
         display: flex;
         justify-content: space-between;
         padding: 10px;
-        background-color: #eee;
+        background-color: #fbcde4;
       }
 
       #main-container {
-        background-color: lightblue;
+        background-color: rgb(247, 124, 165);
         padding: 50px;
       }
 
@@ -31,23 +31,17 @@
         display: grid;
         grid-auto-flow: column;
       }
-
-      #products-view {
-        display: grid;
-      }
     </style>
   </head>
   <body>
     <header class="header">
-      <a href="/vaated-dom"><h1>E-Store</h1></a>
+      <a href="/vaated-dom"><h1>Crazy Market</h1></a>
       <div id="categories">
         <!-- Kategooriad: lisatakse JavaScripti abil -->
       </div>
       <div>
-        <button id="favorites-button">Favorites</button>
-        <button id="cart-button">
-          Shopping Cart (<span id="cart-count">0</span>)
-        </button>
+        <button id="favorites-button">Lemmikud</button>
+        <button id="cart-button">Ostukorv</button>
       </div>
     </header>
 

@@ -52,10 +52,10 @@ export class Cart {
   displayTotalItems() {
     const cartCout = document.getElementById("cart-count");
 
-    cartCout.innerHTML = this.items.reduce(
-      (total, item) => total + item.quantity,
-      0
-    );
+    // cartCout.innerHTML = this.items.reduce(
+    //   (total, item) => total + item.quantity,
+    //   0
+    // );
   }
 
   // Ostukorvi tühjendamine
