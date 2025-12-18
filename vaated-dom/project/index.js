@@ -126,12 +126,12 @@ import { displayAllProductsView } from "../views/allProductsView.js";
 import { displayCartView } from "../views/cartView.js";
 import { displayFavoritesView } from "../views/favoritesView.js";
 import { dispalyProductDetailView } from "../views/productDetailView.js";
-// import { navigate } from "./router.js";
+import { navigate } from "./router.js";
 
 const products = [
-  new Product(1, "Sülearvuti", 999.99, "Elektroonika"),
-  new Product(2, "Telefon", 599.99, "Elektroonika"),
-  new Product(3, "Tahvelarvuti", 299.99, "Elektroonika"),
+  new Product("Sülearvuti", 999.99, "Elektroonika", "../../img/laptop.png"),
+  new Product("Telefon", 599.99, "Elektroonika", "../../img/smartphone.png"),
+  new Product("Tahvelarvuti", 299.99, "Elektroonika", "../../img/tablet.png"),
 ];
 
 cartConstructor.addProduct(products[0], products[2]);
@@ -145,6 +145,10 @@ const initApp = async () => {
   const cartButton = document.getElementById("cart-button");
   cartButton.onclick = () => {
     navigate("cart");
+  };
+  const homeButton = document.getElementById("home-button");
+  homeButton.onclick = () => {
+    navigate("allProducts", products);
   };
 
   displayAllProductsView(products);

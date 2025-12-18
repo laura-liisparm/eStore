@@ -8,9 +8,11 @@ export const displayAllProductsView = (products) => {
 
   products.forEach((product) => {
     const productCard = document.createElement("div");
+    productCard.classList.add("product-card");
 
     productCard.innerHTML = `
-    <h3>${product.name}</h3>
+      <img src="${product.image}" alt="${product.title}" class="product-image" />
+    <h3>${product.title}</h3>
     <p>Kategooria: ${product.category}</p>
     <p>Hind: €${product.price}</p>
     <button class="favorites-btn">Lisa lemmikutesse</button>

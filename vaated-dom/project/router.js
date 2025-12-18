@@ -1,7 +1,7 @@
-import { displayFavoritesView } from "./views/favoritesView.js";
-import { dispalyProductDetailView } from "./views/productDetailView.js";
-import { displayCartView } from "./views/cartView.js";
-import { displayAllProductsView } from "./views/allProductsView.js";
+import { displayFavoritesView } from "../views/favoritesView.js";
+import { dispalyProductDetailView } from "../views/productDetailView.js";
+import { displayCartView } from "../views/cartView.js";
+import { displayAllProductsView } from "../views/allProductsView.js";
 
 export const navigate = (view, param) => {
   const views = {

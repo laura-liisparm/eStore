@@ -11,7 +11,7 @@ export const displayFavoritesView = () => {
     const favoriteItemElement = document.createElement("div");
     favoriteItemElement.classList.add("favorite-item");
     favoriteItemElement.innerHTML = `
-        <h3>${item.product.name}</h3>
+        <h3>${item.product.title}</h3>
         <p>Hind: $${item.product.price}</p>
       `;
     container.appendChild(favoriteItemElement);

@@ -1,16 +1,17 @@
 export class Product {
-  constructor(title, price, category) {
+  constructor(title, price, category, image) {
     this.id = crypto.randomUUID();
     this.title = title;
     this.price = price;
     this.category = category;
+    this.image = image || "../img/placeholder.png";
   }
 
   displayProduct() {
-    return `${this.name} - ${this.category} - $${this.price}`;
+    return `${this.title} - ${this.category} - $${this.price}`;
   }
 
   discountedPrice(discountPercent) {
-    return price - (price * discount) / 100;
+    return this.price - (this.price * discountPercent) / 100;
   }
 }
