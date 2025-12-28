@@ -40,6 +40,10 @@ export class Customer {
   getAllFavorites() {
     return this.favorites;
   }
+
+  isFavorite(product) {
+    return this.favorites.some((item) => item.product.id === product.id);
+  }
 }
 
 export const customerConstructor = new Customer("Laura-Liis");

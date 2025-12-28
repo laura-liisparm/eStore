@@ -42,10 +42,9 @@ export class Cart {
 
   // Kogu ostukorvi hind
   calculateTotal() {
-    return this.items.reduce(
-      (total, item) => total + item.product.price * item.quantity,
-      0
-    );
+    return this.items
+      .reduce((total, item) => total + item.product.price * item.quantity, 0)
+      .toFixed(2);
   }
 
   // Toodete koguarv

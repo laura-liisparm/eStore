@@ -25,3 +25,36 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   border-color: #aaa;
 }
+
+.product-card {
+  position: relative;
+  cursor: pointer;
+}
+
+.heart {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  fill: none;
+  stroke: black;
+  stroke-width: 2;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.heart.active {
+  fill: red;
+  stroke: red;
+}
+
+.cart-icon {
+  margin-top: 10px;
+  fill: none;
+  stroke: black;
+  stroke-width: 2;
+  cursor: pointer;
+}
+
+.cart-icon.added {
+  stroke: green;
+}

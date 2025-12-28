@@ -125,7 +125,7 @@ import { Product } from "../constructors/product.js";
 import { displayAllProductsView } from "../views/allProductsView.js";
 import { displayCartView } from "../views/cartView.js";
 import { displayFavoritesView } from "../views/favoritesView.js";
-import { dispalyProductDetailView } from "../views/productDetailView.js";
+import { displayProductDetailView } from "../views/productDetailView.js";
 import { navigate } from "./router.js";
 
 const products = [
@@ -134,8 +134,8 @@ const products = [
   new Product("Tahvelarvuti", 299.99, "Elektroonika", "../../img/tablet.png"),
 ];
 
-cartConstructor.addProduct(products[0], products[2]);
-customerConstructor.toggleFavorites(products[0]);
+//cartConstructor.addProduct(products[0], products[2]);
+//customerConstructor.toggleFavorites(products[0]);
 
 const initApp = async () => {
   const favoritesButton = document.getElementById("favorites-button");

@@ -1,17 +1,17 @@
 // Ühe toote detailvaate genereerimine
-export const dispalyProductDetailView = (product) => {
+export const displayProductDetailView = (product) => {
   const container = document.getElementById("main-container");
   container.innerHTML = "";
 
   const productCard = document.createElement("div");
-  productCard.classList.add("product");
+  productCard.classList.add("product-detail");
 
   productCard.innerHTML = `
-      <h2>${product.name}</h2>
+      <h2>${product.title}</h2>
       <p>Kategooria: ${product.category}</p>
-      <p>Hind: $${product.price}</p>
+      <p>Hind: $${product.price.toFixed(2)}</p>
       <p>ID: ${product.id}</p>
-    `;
+  `;
 
-  container.append(productCard);
+  container.appendChild(productCard);
 };
