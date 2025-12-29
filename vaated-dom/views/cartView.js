@@ -23,10 +23,25 @@ export const displayCartView = () => {
     cartItemElement.classList.add("cart-item");
 
     cartItemElement.innerHTML = `
-      <h3>${item.product.title}</h3>
-      <p>Hind: $${item.product.price}</p>
-      <p>Kogus: ${item.quantity}</p>
-    `;
+  <div class="cart-product-card">
+    <img 
+      src="${item.product.image}" 
+      alt="${item.product.title}" 
+      class="product-image"
+    />
+
+    <h3>${item.product.title}</h3>
+    <p class="category">${item.product.category}</p>
+
+    <p class="price">
+      €${item.product.price.toFixed(2)} × ${item.quantity}
+    </p>
+
+    <p class="subtotal">
+      Kokku: €${(item.product.price * item.quantity).toFixed(2)}
+    </p>
+  </div>
+`;
 
     // Remove button
     const removeButton = document.createElement("button");

@@ -12,7 +12,6 @@ export const displayAllProductsView = (products) => {
   products.forEach((product) => {
     const isFavorite = customerConstructor.isFavorite(product);
 
-    // ✅ Tootekaart
     const productCard = document.createElement("div");
     productCard.classList.add("product-card");
     productCard.dataset.id = product.id;
@@ -33,7 +32,7 @@ export const displayAllProductsView = (products) => {
       <p>Kategooria: ${product.category}</p>
       <p>Hind: €${product.price.toFixed(2)}</p>
 
-      <!-- 🛒 CART -->
+      <!-- CART -->
       <svg class="cart-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="9" cy="21" r="1"></circle>
         <circle cx="20" cy="21" r="1"></circle>
@@ -41,23 +40,20 @@ export const displayAllProductsView = (products) => {
       </svg>
     `;
 
-    // ❤️ Favoriidi toggle
     const heart = productCard.querySelector(".heart");
     heart.addEventListener("click", (e) => {
-      e.stopPropagation(); // vältida detailvaate avamist
+      e.stopPropagation();
       customerConstructor.toggleFavorites(product);
       heart.classList.toggle("active", customerConstructor.isFavorite(product));
     });
 
-    // 🛒 Ostukorvi lisamine
     const cartIcon = productCard.querySelector(".cart-icon");
     cartIcon.addEventListener("click", (e) => {
       e.stopPropagation();
       cartConstructor.addProduct(product);
-      cartIcon.classList.add("added"); // visuaalne tagasiside
+      cartIcon.classList.add("added");
     });
 
-    // Klikk tootekaardil → detailvaade
     productCard.addEventListener("click", () => {
       navigate("productDetail", product);
     });
