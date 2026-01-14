@@ -35,14 +35,12 @@ export const displayProductDetailView = (product) => {
     </div>
   `;
 
-  // ❤️ Favorite toggle
   const heart = productCard.querySelector(".heart");
   heart.addEventListener("click", () => {
     customerConstructor.toggleFavorites(product);
     heart.classList.toggle("active", customerConstructor.isFavorite(product));
   });
 
-  // 🛒 Add to cart
   const addToCartBtn = productCard.querySelector(".add-to-cart");
   addToCartBtn.addEventListener("click", () => {
     cartConstructor.addProduct(product);

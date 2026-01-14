@@ -1,6 +1,5 @@
 import { cartConstructor } from "../constructors/cart.js";
 
-//Ostukorvi vaate genereerimine
 export const displayCartView = () => {
   const container = document.getElementById("main-container");
   container.innerHTML = "<h2>Ostukorv</h2>";
@@ -14,7 +13,6 @@ export const displayCartView = () => {
     return;
   }
 
-  // Create a container for all items
   const itemsContainer = document.createElement("div");
   itemsContainer.classList.add("cart-items-container");
 
@@ -43,7 +41,6 @@ export const displayCartView = () => {
   </div>
 `;
 
-    // Remove button
     const removeButton = document.createElement("button");
     removeButton.textContent = "Eemalda";
     removeButton.addEventListener("click", () => {
@@ -57,7 +54,6 @@ export const displayCartView = () => {
 
   container.appendChild(itemsContainer);
 
-  // Show total price
   const totalPrice = document.createElement("p");
   totalPrice.classList.add("cart-total");
   totalPrice.innerHTML = `<strong>Kokku: $${cartConstructor.calculateTotal()}</strong>`;
