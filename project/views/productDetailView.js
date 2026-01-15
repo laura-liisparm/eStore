@@ -1,5 +1,5 @@
-import { cartConstructor } from "../constructors/cart.js";
-import { customerConstructor } from "../constructors/customer.js";
+import { cartConstructor } from "../../constructors/cart.js";
+import { customerConstructor } from "../../constructors/customer.js";
 
 export const displayProductDetailView = (product) => {
   const container = document.getElementById("main-container");

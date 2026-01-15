@@ -1,4 +1,4 @@
-import { cartConstructor } from "../constructors/cart.js";
+import { cartConstructor } from "../../constructors/cart.js";
 
 export const displayCartView = () => {
   const container = document.getElementById("main-container");

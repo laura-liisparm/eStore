@@ -1,5 +1,5 @@
 import { customerConstructor } from "../constructors/customer.js";
-import { navigate } from "../project/router.js";
+import { navigate } from "../router.js";
 
 export const displayFavoritesView = () => {
   const favorites = customerConstructor.getAllFavorites();

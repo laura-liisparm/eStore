@@ -119,42 +119,66 @@ const customer1 = new customer("Alice");
 const order1 = customer1.placeOrder(myCart);
 customer1.printOrderHistory();
 */
-import { cartConstructor } from "../constructors/cart.js";
-import { customerConstructor } from "../constructors/customer.js";
-import { Product } from "../constructors/product.js";
-import { displayAllProductsView } from "../views/allProductsView.js";
-import { displayCartView } from "../views/cartView.js";
-import { displayFavoritesView } from "../views/favoritesView.js";
-import { displayProductDetailView } from "../views/productDetailView.js";
+import { cartConstructor } from "./constructors/cart.js";
+import { customerConstructor } from "./constructors/customer.js";
+import { Product } from "./constructors/product.js";
+import { displayAllProductsView } from "./views/allProductsView.js";
+import { displayCartView } from "./views/cartView.js";
+import { displayFavoritesView } from "./views/favoritesView.js";
+import { displayProductDetailView } from "./views/productDetailView.js";
 import { navigate } from "./router.js";
 
-const products = [
-  new Product("Sülearvuti", 999.99, "Elektroonika", "../../img/laptop.png"),
-  new Product("Telefon", 599.99, "Elektroonika", "../../img/smartphone.png"),
-  new Product("Tahvelarvuti", 299.99, "Elektroonika", "../../img/tablet.png"),
-];
+// API functions
+import {
+  getProductsDataByCategory,
+  getAllCategory,
+  getProductById,
+  getFavoritesProductByuserID,
+  addFavoriteProductById,
+  deleteFavoriteProductById,
+} from "./api.js";
 
-//cartConstructor.addProduct(products[0], products[2]);
-//customerConstructor.toggleFavorites(products[0]);
+const USER_ID = "user1"; // example user id
 
 const initApp = async () => {
+  // Buttons
   const favoritesButton = document.getElementById("favorites-button");
-  favoritesButton.onclick = () => {
-    navigate("favorites");
-  };
-  const cartButton = document.getElementById("cart-button");
-  cartButton.onclick = () => {
-    navigate("cart");
-  };
-  const homeButton = document.getElementById("home-button");
-  homeButton.onclick = () => {
-    navigate("allProducts", products);
+  favoritesButton.onclick = async () => {
+    const favorites = await getFavoritesProductByuserID(USER_ID);
+    displayFavoritesView(favorites);
   };
 
-  displayAllProductsView(products);
-  // dispalyProductDetailView(products[1]);
-  // displayCartView();
-  // displayFavoritesView();
+  const cartButton = document.getElementById("cart-button");
+  cartButton.onclick = () => {
+    displayCartView(cartConstructor.getProducts());
+  };
+
+  const homeButton = document.getElementById("home-button");
+  homeButton.onclick = async () => {
+    const products = await getProductsDataByCategory();
+    displayAllProductsView(products);
+  };
+
+  console.log("Loading products from API...");
+  // Load all products initially
+
+  displayAllProductsView();
+
+  // Load categories for filtering (if you have a filter dropdown)
+  const categories = await getAllCategory();
+  const categorySelect = document.getElementById("category-select");
+  if (categorySelect) {
+    categories.forEach((cat) => {
+      const option = document.createElement("option");
+      option.value = cat;
+      option.textContent = cat;
+      categorySelect.appendChild(option);
+    });
+
+    categorySelect.onchange = async (e) => {
+      navigate("allProducts", e.target.value);
+    };
+  }
 };
 
 document.addEventListener("DOMContentLoaded", initApp);
