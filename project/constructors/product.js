@@ -1,6 +1,6 @@
 export class Product {
   constructor(id, title, price, category, image, description) {
-    this.id = crypto.randomUUID();
+    this.id = id;
     this.title = title;
     this.price = Number(price) || 0;
     this.category = category;

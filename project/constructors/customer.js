@@ -60,7 +60,12 @@ export class Customer {
       await addFavoriteProductById(this._userID, productId);
     }
 
+
     await this.getAllFavorites(); // 🔥 MUST await
+  }
+
+  async removeFromFavorites(productId) {
+    await deleteFavoriteProductById(this.userID, productId);
   }
 
   isFavorite(productId) {

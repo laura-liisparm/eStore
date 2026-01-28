@@ -47,31 +47,20 @@ export const displayAllProductsView = async (category) => {
 
     const favBtn = card.querySelector(".favorite");
 
-    // 🔁 Initial state (important for reload/navigation)
+    // set initial state
     if (customerConstructor.isFavorite(product.id)) {
       favBtn.classList.add("inFavorites");
     }
 
     favBtn.addEventListener("click", async (e) => {
       e.stopPropagation();
-
-      // Prevent double clicks
       favBtn.disabled = true;
-
-      const isFav = customerConstructor.isFavorite(product.id);
-
       try {
-        if (!isFav) {
-          // ❤️ add to favorites
-          await customerConstructor.toggleFavorites(product.id);
-          favBtn.classList.add("inFavorites");
-        } else {
-          // 💔 remove from favorites
-          await customerConstructor.toggleFavorites(product.id);
-          favBtn.classList.remove("inFavorites");
-        }
-      } catch (err) {
-        console.error("Failed to update favorites", err);
+        await customerConstructor.toggleFavorites(product.id);
+        favBtn.classList.toggle(
+          "inFavorites",
+          customerConstructor.isFavorite(product.id), // checks updated array
+        );
       } finally {
         favBtn.disabled = false;
       }

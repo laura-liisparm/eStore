@@ -6,8 +6,8 @@ const path = require("path");
 
 const app = express();
 
-const filePath = path.join(__dirname, "data", "products.json");
-const favoritesFilePath = path.join(__dirname, "data", "favorites.json");
+const productsJsonFilePath = path.join(__dirname, "data", "products.json");
+const favoritesJsonFilePath = path.join(__dirname, "data", "favorites.json");
 
 // Serve static frontend
 app.use(express.static(path.join(__dirname, "project")));
@@ -17,7 +17,7 @@ const fetchAndSaveProducts = async () => {
   try {
     const response = await axios.get("https://fakestoreapi.com/products");
     const products = response.data;
-    await fs.writeFile(filePath, JSON.stringify(products, null, 2));
+    await fs.writeFile(productsJsonFilePath, JSON.stringify(products, null, 2));
     console.log("Products loaded from FakeStoreAPI");
   } catch (error) {
     console.error("Failed to fetch products from FakeStoreAPI:", error);
@@ -26,7 +26,7 @@ const fetchAndSaveProducts = async () => {
 
 const initProducts = async () => {
   try {
-    const raw = await fs.readFile(filePath, "utf-8");
+    const raw = await fs.readFile(productsJsonFilePath, "utf-8");
     if (!raw.trim() || JSON.parse(raw).length === 0) {
       await fetchAndSaveProducts();
     }
@@ -41,8 +41,9 @@ initProducts();
 
 // Get all products (optionally by category)
 app.get("/api/products", async (req, res) => {
+  console.log("GET products");
   try {
-    const rawData = await fs.readFile(filePath, "utf-8");
+    const rawData = await fs.readFile(productsJsonFilePath, "utf-8");
     const products = JSON.parse(rawData || "[]");
 
     const category = req.query.category;
@@ -60,7 +61,7 @@ app.get("/api/products", async (req, res) => {
 // Get categories
 app.get("/api/products/categories", async (req, res) => {
   try {
-    const rawData = await fs.readFile(filePath, "utf-8");
+    const rawData = await fs.readFile(productsJsonFilePath, "utf-8");
     const products = JSON.parse(rawData || "[]");
     const categories = [...new Set(products.map((p) => p.category))];
     res.json(categories);
@@ -73,7 +74,7 @@ app.get("/api/products/categories", async (req, res) => {
 // Get product by ID
 app.get("/api/products/:id", async (req, res) => {
   try {
-    const products = JSON.parse(await fs.readFile(filePath, "utf-8"));
+    const products = JSON.parse(await fs.readFile(productsJsonFilePath, "utf-8"));
     const product = products.find((p) => p.id === Number(req.params.id));
     if (!product) return res.status(404).json({ message: "Product not found" });
     res.json(product);
@@ -87,14 +88,27 @@ app.get("/api/products/:id", async (req, res) => {
 
 // Get favorites for a user
 app.get("/api/favorites/:userID", async (req, res) => {
+  console.log("GET favorites");
   try {
-    const favoritesData = JSON.parse(
-      await fs.readFile(favoritesFilePath, "utf-8"),
+    const allFavoritesJson = JSON.parse(
+      await fs.readFile(favoritesJsonFilePath, "utf-8"),
     );
-    const favoriteIds = favoritesData[req.params.userID] || [];
-    const products = JSON.parse(await fs.readFile(filePath, "utf-8"));
-    const favorites = products.filter((p) => favoriteIds.includes(p.id));
-    res.json(favorites);
+    let userID = req.params.userID;
+    console.log(`Fetching favorites for userId = ${userID}`);
+    const userFavoriteProductIds = Array.from(allFavoritesJson[userID] || []);
+    console.log(`Users favorite product Ids: ${JSON.stringify(userFavoriteProductIds)}`)
+    const products = Array.from(JSON.parse(await fs.readFile(productsJsonFilePath, "utf-8")));
+    const favoriteProductsForUser = products.filter((product) => {
+      productId = product["id"]
+      let isInFavorites = userFavoriteProductIds.includes(productId.toString());
+      if (isInFavorites) {
+        console.log(`Found favorite product with ID: ${product["id"]} `);
+      }
+      return isInFavorites
+
+    });
+    res.json(favoriteProductsForUser);
+    console.log(`Responding with: ${JSON.stringify(favoriteProductsForUser)}`);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to read favorites" });
@@ -103,20 +117,30 @@ app.get("/api/favorites/:userID", async (req, res) => {
 
 // Add favorite
 app.post("/api/favorites/:userID/:productId", async (req, res) => {
+  console.log("POST favorite");
   try {
-    const favoritesData = JSON.parse(
-      await fs.readFile(favoritesFilePath, "utf-8"),
+    const allFavoritesJson = JSON.parse(
+      await fs.readFile(favoritesJsonFilePath, "utf-8"),
     );
+
     const { userID, productId } = req.params;
-    const pid = Number(productId);
-    favoritesData[userID] = [
-      ...new Set([...(favoritesData[userID] || []), pid]),
-    ];
+    console.log(`userId= ${userID} productId=${productId}`);
+    console.log(`All favorites in favorites.json : ${JSON.stringify(allFavoritesJson)}`);
+
+    const productIds = Array.from(allFavoritesJson[userID] || []);
+    console.log(`Favorite product IDs for userId=${userID}  productIds=${JSON.stringify(productIds)}`);
+    if (!productIds.includes(productId)) {
+      productIds.push(productId);
+    }
+    allFavoritesJson[userID] = productIds;
+
+    console.log(`Writing favorites back to favorites.json file. All favorites: ${JSON.stringify(allFavoritesJson)}`);
     await fs.writeFile(
-      favoritesFilePath,
-      JSON.stringify(favoritesData, null, 2),
+      favoritesJsonFilePath,
+      JSON.stringify(allFavoritesJson, null, 2),
     );
-    res.json(favoritesData[userID]);
+    res.json(productIds);
+    console.log(`Responding with: ${JSON.stringify(productIds)}`);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to add favorite" });
@@ -125,20 +149,24 @@ app.post("/api/favorites/:userID/:productId", async (req, res) => {
 
 // Delete favorite
 app.delete("/api/favorites/:userID/:productId", async (req, res) => {
+  console.log("DELETE favorite")
   try {
-    const favoritesData = JSON.parse(
-      await fs.readFile(favoritesFilePath, "utf-8"),
+    const allFavoritesJson = JSON.parse(
+      await fs.readFile(favoritesJsonFilePath, "utf-8"),
     );
     const { userID, productId } = req.params;
-    const pid = Number(productId);
-    favoritesData[userID] = (favoritesData[userID] || []).filter(
-      (id) => id !== pid,
-    );
+    const productIds = Array.from(allFavoritesJson[userID] || []);
+    const elementIndexInArray = productIds.indexOf(productId)
+    if (elementIndexInArray > -1) {
+      productIds.splice(elementIndexInArray, 1)
+    }
+    allFavoritesJson[userID] = productIds
+    console.log(`after deleting favorite: ${JSON.stringify(allFavoritesJson)}`)
     await fs.writeFile(
-      favoritesFilePath,
-      JSON.stringify(favoritesData, null, 2),
+      favoritesJsonFilePath,
+      JSON.stringify(allFavoritesJson, null, 2),
     );
-    res.json(favoritesData[userID]);
+    res.json(allFavoritesJson[userID]);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Failed to delete favorite" });

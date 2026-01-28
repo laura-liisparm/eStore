@@ -2,7 +2,7 @@ import { customerConstructor } from "../constructors/customer.js";
 import { navigate } from "../router.js";
 
 export const displayFavoritesView = async () => {
-  const favorites = customerConstructor.getAllFavorites();
+  const favorites = await customerConstructor.getAllFavorites();
 
   const container = document.getElementById("main-container");
   container.innerHTML = "<h2>Lemmikud</h2>";
@@ -16,15 +16,15 @@ export const displayFavoritesView = async () => {
   favoritesContainer.classList.add("products-container");
 
   favorites.forEach((item) => {
-    const product = item.product;
+    const product = item;
 
     const favoriteCard = document.createElement("div");
     favoriteCard.classList.add("product-card");
 
     favoriteCard.innerHTML = `
       <img 
-        src="${product.image}" 
-        alt="${product.title}" 
+        src="${product.description}" 
+        alt="${product.image}" 
         class="product-image"
       />
 
@@ -37,10 +37,10 @@ export const displayFavoritesView = async () => {
     `;
 
     const removeBtn = favoriteCard.querySelector(".remove-favorite");
-    removeBtn.addEventListener("click", (e) => {
+    removeBtn.addEventListener("click", async (e) => {
       e.stopPropagation();
-      customerConstructor.toggleFavorites(product);
-      displayFavoritesView();
+      await customerConstructor.removeFromFavorites(product.id);
+      await displayFavoritesView();
     });
 
     favoriteCard.addEventListener("click", () => {
