@@ -1,6 +1,4 @@
-// Customer.js
 import { Order } from "./order.js";
-
 import {
   addFavoriteProductById,
   deleteFavoriteProductById,
@@ -9,24 +7,21 @@ import {
 
 export class Customer {
   constructor() {
-    this._userName;
-    this._userID;
+    this._userName = null;
+    this._userID = sessionStorage.getItem("userID") || null;
     this.orderHistory = [];
     this.favorites = [];
   }
+
   get userID() {
     return this._userID;
   }
 
   set userID(id) {
-    const USER_ID = sessionStorage.getItem("userID");
-    if (USER_ID) {
-      this._userID = USER_ID;
-    } else {
-      this._userID = id;
-      sessionStorage.setItem("userID", id);
-    }
+    this._userID = id;
+    sessionStorage.setItem("userID", id);
   }
+
   get userName() {
     return this._userName;
   }
@@ -51,52 +46,53 @@ export class Customer {
       console.log(
         `Tellimus ${
           index + 1
-        } - Kuupäev: ${order.orderDate.toDateString()}, Kogusumma: $${order.cart.calculateTotal()}`
+        } - Kuupäev: ${order.orderDate.toDateString()}, Kogusumma: €${order.cart.calculateTotal()}`,
       );
     });
   }
+
   async toggleFavorites(productId) {
     const existingItem = this.favorites.find((item) => item.id === productId);
-    //  console.log(productId);
+
     if (existingItem) {
       await deleteFavoriteProductById(this._userID, productId);
     } else {
       await addFavoriteProductById(this._userID, productId);
     }
-    this.getAllFavorites();
+
+    await this.getAllFavorites(); // 🔥 MUST await
   }
 
   isFavorite(productId) {
-    //console.log("is favorie", productId);
-    //  console.log("is favorie", productId, this.favorites);
-    const existingItem = this.favorites.find((item) => item.id === productId);
-
-    return !!existingItem;
+    return this.favorites.some((item) => item.id === productId);
   }
 
   async getAllFavorites() {
+    if (!this._userID) return [];
     const data = await getFavoritesProductByuserID(this._userID);
-    this.favorites = data;
-    console.log("favorite", this.favorites);
+    this.favorites = data || [];
+    console.log("Favorites loaded:", this.favorites);
     return this.favorites;
   }
 
   async login(userName) {
-    //console.log("110", USER_ID, sessionStorage);
-    const randomId = Math.floor(Math.random() * 100);
-    this._userID = randomId;
     this._userName = userName;
 
-    sessionStorage.setItem("userID", randomId);
+    // restore from session or generate a new ID
+    if (!this._userID) {
+      const randomId = Math.floor(Math.random() * 1000);
+      this._userID = randomId;
+      sessionStorage.setItem("userID", randomId);
+    }
 
-    // alert(`User ${userName} has logged in`);
-    //Võta kõik lemmikud BE valmis
-    this.getAllFavorites();
+    // 🔥 await favorites so hearts work correctly
+    await this.getAllFavorites();
   }
 
   logout() {
     sessionStorage.removeItem("userID");
     this.favorites = [];
+    this._userID = null;
     alert(`User ${this.userName} has logged out`);
   }
 }

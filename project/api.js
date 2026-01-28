@@ -3,9 +3,10 @@ import { Product } from "./constructors/product.js";
 /* GET products, optional category */
 export const getProductsDataByCategory = async (category) => {
   try {
-    const url = category
-      ? `/api/products?category=${encodeURIComponent(category)}`
-      : "/api/products";
+    const url =
+      category && category !== "all"
+        ? `/api/products?category=${encodeURIComponent(category)}`
+        : "/api/products";
 
     const res = await fetch(url);
     if (!res.ok) throw new Error("Failed to fetch products");
@@ -18,9 +19,9 @@ export const getProductsDataByCategory = async (category) => {
           item.title,
           item.price,
           item.category,
+          item.image,
           item.description,
-          item.image
-        )
+        ),
     );
   } catch (error) {
     console.error(error);
@@ -52,7 +53,7 @@ export const getProductById = async (productId) => {
       productData.price,
       productData.category,
       productData.description,
-      productData.image
+      productData.image,
     );
   } catch (error) {
     console.error(error);
@@ -74,8 +75,8 @@ export const getFavoritesProductByuserID = async (userID) => {
           item.price,
           item.category,
           item.description,
-          item.image
-        )
+          item.image,
+        ),
     );
   } catch (error) {
     console.error(error);

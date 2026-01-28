@@ -89,7 +89,7 @@ app.get("/api/products/:id", async (req, res) => {
 app.get("/api/favorites/:userID", async (req, res) => {
   try {
     const favoritesData = JSON.parse(
-      await fs.readFile(favoritesFilePath, "utf-8")
+      await fs.readFile(favoritesFilePath, "utf-8"),
     );
     const favoriteIds = favoritesData[req.params.userID] || [];
     const products = JSON.parse(await fs.readFile(filePath, "utf-8"));
@@ -105,7 +105,7 @@ app.get("/api/favorites/:userID", async (req, res) => {
 app.post("/api/favorites/:userID/:productId", async (req, res) => {
   try {
     const favoritesData = JSON.parse(
-      await fs.readFile(favoritesFilePath, "utf-8")
+      await fs.readFile(favoritesFilePath, "utf-8"),
     );
     const { userID, productId } = req.params;
     const pid = Number(productId);
@@ -114,7 +114,7 @@ app.post("/api/favorites/:userID/:productId", async (req, res) => {
     ];
     await fs.writeFile(
       favoritesFilePath,
-      JSON.stringify(favoritesData, null, 2)
+      JSON.stringify(favoritesData, null, 2),
     );
     res.json(favoritesData[userID]);
   } catch (err) {
@@ -127,16 +127,16 @@ app.post("/api/favorites/:userID/:productId", async (req, res) => {
 app.delete("/api/favorites/:userID/:productId", async (req, res) => {
   try {
     const favoritesData = JSON.parse(
-      await fs.readFile(favoritesFilePath, "utf-8")
+      await fs.readFile(favoritesFilePath, "utf-8"),
     );
     const { userID, productId } = req.params;
     const pid = Number(productId);
     favoritesData[userID] = (favoritesData[userID] || []).filter(
-      (id) => id !== pid
+      (id) => id !== pid,
     );
     await fs.writeFile(
       favoritesFilePath,
-      JSON.stringify(favoritesData, null, 2)
+      JSON.stringify(favoritesData, null, 2),
     );
     res.json(favoritesData[userID]);
   } catch (err) {
@@ -146,7 +146,7 @@ app.delete("/api/favorites/:userID/:productId", async (req, res) => {
 });
 
 // Serve frontend
-app.get("/", (req, res) => {
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, "project", "index.html"));
 });
 

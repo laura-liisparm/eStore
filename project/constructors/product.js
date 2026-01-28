@@ -1,10 +1,11 @@
 export class Product {
-  constructor(title, price, category, image) {
+  constructor(id, title, price, category, image, description) {
     this.id = crypto.randomUUID();
     this.title = title;
     this.price = Number(price) || 0;
     this.category = category;
     this.image = image || "../img/placeholder.png";
+    this.description = description || "No description available.";
   }
 
   displayProduct() {

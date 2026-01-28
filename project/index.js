@@ -121,63 +121,55 @@ customer1.printOrderHistory();
 */
 import { cartConstructor } from "./constructors/cart.js";
 import { customerConstructor } from "./constructors/customer.js";
-import { Product } from "./constructors/product.js";
-import { displayAllProductsView } from "./views/allProductsView.js";
-import { displayCartView } from "./views/cartView.js";
-import { displayFavoritesView } from "./views/favoritesView.js";
-import { displayProductDetailView } from "./views/productDetailView.js";
 import { navigate } from "./router.js";
-
-// API functions
-import {
-  getProductsDataByCategory,
-  getAllCategory,
-  getProductById,
-  getFavoritesProductByuserID,
-  addFavoriteProductById,
-  deleteFavoriteProductById,
-} from "./api.js";
-
-const USER_ID = "user1"; // example user id
+import { getAllCategory } from "./api.js";
 
 const initApp = async () => {
+  // 🔥 LOGIN USER FIRST
+  await customerConstructor.login("TestUser");
+
+  // 🔥 LOAD FAVORITES ON START
+  await customerConstructor.getAllFavorites();
+
   // Buttons
-  const favoritesButton = document.getElementById("favorites-button");
-  favoritesButton.onclick = async () => {
-    const favorites = await getFavoritesProductByuserID(USER_ID);
-    displayFavoritesView(favorites);
+  document.getElementById("favorites-button").onclick = async () => {
+    await navigate("favorites");
   };
 
-  const cartButton = document.getElementById("cart-button");
-  cartButton.onclick = () => {
-    displayCartView(cartConstructor.getProducts());
+  document.getElementById("cart-button").onclick = () => {
+    navigate("cart", cartConstructor.getAllProducts());
   };
 
-  const homeButton = document.getElementById("home-button");
-  homeButton.onclick = async () => {
-    const products = await getProductsDataByCategory();
-    displayAllProductsView(products);
+  document.getElementById("home-button").onclick = () => {
+    navigate("allProducts", "all");
   };
 
-  console.log("Loading products from API...");
-  // Load all products initially
-
-  displayAllProductsView();
-
-  // Load categories for filtering (if you have a filter dropdown)
+  // Categories
   const categories = await getAllCategory();
-  const categorySelect = document.getElementById("category-select");
+  const categorySelect = document.getElementById("categories");
+
   if (categorySelect) {
     categories.forEach((cat) => {
-      const option = document.createElement("option");
-      option.value = cat;
-      option.textContent = cat;
-      categorySelect.appendChild(option);
+      const btn = document.createElement("button");
+      btn.textContent = cat;
+      btn.onclick = () => navigate("allProducts", cat);
+      categorySelect.appendChild(btn);
     });
+  }
 
-    categorySelect.onchange = async (e) => {
-      navigate("allProducts", e.target.value);
-    };
+  // Routing on reload
+  const path = window.location.pathname;
+
+  if (path === "/favorites") {
+    await navigate("favorites", null, false);
+  } else if (path === "/cart") {
+    await navigate("cart", null, false);
+  } else if (path.startsWith("/product/")) {
+    navigate("productDetail", path.split("/").pop(), false);
+  } else if (path.startsWith("/category/")) {
+    navigate("allProducts", path.split("/").pop(), false);
+  } else {
+    await navigate("allProducts", "all", false);
   }
 };
 

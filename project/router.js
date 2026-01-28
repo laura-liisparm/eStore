@@ -3,16 +3,16 @@ import { displayProductDetailView } from "./views/productDetailView.js";
 import { displayCartView } from "./views/cartView.js";
 import { displayAllProductsView } from "./views/allProductsView.js";
 
-export const navigate = (view, param) => {
+export const navigate = async (view, param, pushState = true) => {
   const views = {
     allProducts: () => displayAllProductsView(param), // param peaks olema products massiiv
     productDetail: () => displayProductDetailView(param), // param on üks product
-    cart: () => displayCartView(),
-    favorites: () => displayFavoritesView(),
+    cart: () => displayCartView(param),
+    favorites: () => displayFavoritesView(param),
   };
 
   if (views[view]) {
-    views[view]();
+    await views[view]();
     if (pushState) {
       const url = constructUrl(view, param);
       window.history.pushState({ view, param }, "", url);

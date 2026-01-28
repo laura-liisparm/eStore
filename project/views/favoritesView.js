@@ -1,7 +1,7 @@
 import { customerConstructor } from "../constructors/customer.js";
 import { navigate } from "../router.js";
 
-export const displayFavoritesView = () => {
+export const displayFavoritesView = async () => {
   const favorites = customerConstructor.getAllFavorites();
 
   const container = document.getElementById("main-container");
